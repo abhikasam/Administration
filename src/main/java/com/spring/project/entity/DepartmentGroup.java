@@ -1,6 +1,7 @@
-package com.spring.project.repository;
+package com.spring.project.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 
 @Entity
 @Table(name = "departmentgroup")

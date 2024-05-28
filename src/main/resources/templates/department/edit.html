@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://thymeleaf.org/thymeleaf-extras-springsecurity6"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Administration - Department Edit</title>
+    <link href="/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
+    <script src="/assets/js/bootstrap/bootstrap.js"></script>
+    <script src="/assets/js/jquery/jquery.js"></script>
+    <script src="/assets/js/jquery/popper.js"></script>
+</head>
+<body>
+  Department Edit.
+  <div class="container">
+      <div th:if="${param.success}" class="text text-success">
+          Department saved successfully.
+      </div>
+      <div th:text="${#fields.errors('department.departmentCode')}"></div>
+      <ul>
+          <li class="alert alert-danger" th:each="error : ${errors}">
+              <span th:text="${error.field} + ': ' + ${error.defaultMessage}"></span>
+          </li>
+      </ul>
+      <form th:action="@{/department/edit}" method="post" th:object="${department}">
+          <div class="row mt-2">
+              <div class="col-2">
+                  <label>Department Code : </label>
+              </div>
+              <div class="col-4">
+                  <input th:field="*{departmentCode}" class="form-control" />
+              </div>
+          </div>
+          <div class="row mt-2">
+              <div class="col-2">
+                  <label>Department Name : </label>
+              </div>
+              <div class="col-4">
+                  <input id="name" th:field="*{departmentName}" class="form-control" />
+              </div>
+          </div>
+          <div class="row mt-2">
+              <div class="col-2">
+                  <label>Entity : </label>
+              </div>
+              <div class="col-4">
+                  <input th:field="*{entityId}" class="form-control" />
+              </div>
+          </div>
+          <div class="row mt-2">
+              <div class="col-2">
+                  <label>Group : </label>
+              </div>
+              <div class="col-4">
+                  <input th:field="*{departmentGroupId}" class="form-control" />
+              </div>
+          </div>
+          <div class="row mt-2">
+              <div class="col-2">
+                  <label> Is Active : </label>
+              </div>
+              <div class="col-4">
+                  <input type="checkbox" th:field="*{active}" />
+              </div>
+          </div>
+          <div class="row mt-2">
+              <div class="col-2 text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+              <div class="col-2 text-center">
+                  <a th:href="@{/department}" class="btn btn-secondary">Cancel</a>
+              </div>
+          </div>
+      </form>
+  </div>
+</body>
+</html>
