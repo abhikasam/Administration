@@ -17,7 +17,6 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 public class DisplayNameTagProcessor extends AbstractAttributeTagProcessor {
-    private static final String entity_path="package";
     private static final String attr_name="field";
     private static final int precendence=10000;
     public DisplayNameTagProcessor(String dialectPrefix) {
@@ -30,10 +29,17 @@ public class DisplayNameTagProcessor extends AbstractAttributeTagProcessor {
         try{
             String mainClassName = ManagementFactory.getRuntimeMXBean().getSystemProperties().get("sun.java.command");
             String mainClassPackageName = mainClassName.substring(0, mainClassName.lastIndexOf('.'));
-            String entityPath=tag.getAttributeValue(getDialectPrefix(),entity_path);
-            String entityPackagePath=mainClassPackageName+"."+entityPath;
-            Class<?> cls=Class.forName(entityPackagePath);
-            String displayName=getDisplayName(cls,attributeValue);
+            String fieldPath=tag.getAttributeValue(getDialectPrefix(),attr_name);
+            String fieldPackagePath=mainClassPackageName+"."+fieldPath;
+            int lastDotIndex = fieldPackagePath.lastIndexOf('.');
+            if (lastDotIndex == -1) {
+                throw new IllegalArgumentException("Invalid format for class path and field name");
+            }
+            String className = fieldPackagePath.substring(0, lastDotIndex);
+            String fieldName = fieldPackagePath.substring(lastDotIndex + 1);
+
+            Class<?> cls=Class.forName(className);
+            String displayName=getDisplayName(cls,fieldName);
             String text=tag.getAttributeValue("th","text");
             if(text!=null && text.length()>0){
                 displayName=text.replaceAll("\\{0}",displayName);

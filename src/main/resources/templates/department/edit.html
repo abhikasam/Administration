@@ -26,7 +26,7 @@
       <form th:action="@{/department/edit}" method="post" th:object="${department}">
           <div class="row mt-2">
               <div class="col-2">
-                  <label display:package="entity.Department" display:field="departmentCode"></label> :
+                  <label display:field="entity.Department.departmentCode"></label> :
               </div>
               <div class="col-4">
                   <input th:field="*{departmentCode}" class="form-control" />
@@ -34,7 +34,7 @@
           </div>
           <div class="row mt-2">
               <div class="col-2">
-                  <label display:package="entity.Department" display:field="departmentName"></label> :
+                  <label display:field="entity.Department.departmentName"></label> :
               </div>
               <div class="col-4">
                   <input id="name" th:field="*{departmentName}" class="form-control" />
@@ -42,7 +42,7 @@
           </div>
           <div class="row mt-2">
               <div class="col-2">
-                  <label display:package="entity.Department" display:field="entityId"></label> :
+                  <label display:field="entity.Department.entityId"></label> :
               </div>
               <div class="col-4">
                   <input th:field="*{entityId}" class="form-control" />
@@ -50,7 +50,7 @@
           </div>
           <div class="row mt-2">
               <div class="col-2">
-                  <label display:package="entity.Department" display:field="departmentGroupId"></label> :
+                  <label display:field="entity.Department.departmentGroupId"></label> :
               </div>
               <div class="col-4">
                   <input th:field="*{departmentGroupId}" class="form-control" />
