@@ -1,5 +1,6 @@
 package com.spring.project.entity;
 
+import com.spring.project.annotations.DisplayName;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ public class Entity {
     @Column(name = "id")
     private int entityId;
     @Column(name = "name",nullable = false,length = 200)
+    @DisplayName("Entity")
     private String entityName;
     @Column(name = "isactive")
     private boolean isActive;

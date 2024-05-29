@@ -36,7 +36,7 @@ public class Department {
 
     @ManyToOne
     @JoinColumn(name = "entityid")
-    private com.spring.project.entity.Entity Entity;
+    private com.spring.project.entity.Entity entity;
 
     @Transient
     @DisplayName("Entity")

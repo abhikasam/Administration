@@ -26,7 +26,7 @@
       <form th:action="@{/department/edit}" method="post" th:object="${department}">
           <div class="row mt-2">
               <div class="col-2">
-                  <label display:field="entity.Department.departmentCode"></label> :
+                  <label display:field="${department.departmentCode}"></label> :
               </div>
               <div class="col-4">
                   <input th:field="*{departmentCode}" class="form-control" />
@@ -34,7 +34,7 @@
           </div>
           <div class="row mt-2">
               <div class="col-2">
-                  <label display:field="entity.Department.departmentName"></label> :
+                  <label display:field="${department.departmentName}"></label> :
               </div>
               <div class="col-4">
                   <input id="name" th:field="*{departmentName}" class="form-control" />
@@ -42,7 +42,7 @@
           </div>
           <div class="row mt-2">
               <div class="col-2">
-                  <label display:field="entity.Department.entityId"></label> :
+                  <label display:field="${department.entityId}"></label> :
               </div>
               <div class="col-4">
                   <input th:field="*{entityId}" class="form-control" />
@@ -50,7 +50,7 @@
           </div>
           <div class="row mt-2">
               <div class="col-2">
-                  <label display:field="entity.Department.departmentGroupId"></label> :
+                  <label display:field="${department.departmentGroupId}"></label> :
               </div>
               <div class="col-4">
                   <input th:field="*{departmentGroupId}" class="form-control" />
@@ -58,7 +58,7 @@
           </div>
           <div class="row mt-2">
               <div class="col-2">
-                  <label> Is Active : </label>
+                  <label display:field="${department.active}"></label> :
               </div>
               <div class="col-4">
                   <input type="checkbox" th:field="*{active}" />

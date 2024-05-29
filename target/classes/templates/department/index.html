@@ -28,10 +28,13 @@
         <thead class="thead-light">
         <tr>
             <th>
-                <label display:field="entity.Department.departmentCode" />
+                <label display:field="${department.departmentCode}" />
             </th>
             <th>
-                <label display:field="entity.Department.departmentName" />
+                <label display:field="${department.departmentName}" />
+            </th>
+            <th>
+                <label display:field="${department.entity.entityName}" />
             </th>
         </tr>
         </thead>
@@ -39,6 +42,7 @@
             <tr th:each="department : ${departments}">
                 <td th:text="${department.departmentCode}"></td>
                 <td th:text="${department.departmentName}"></td>
+                <td th:text="${department.entity.entityName}"></td>
             </tr>
         </tbody>
     </table>
