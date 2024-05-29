@@ -32,15 +32,20 @@ public class DisplayNameTagProcessor extends AbstractAttributeTagProcessor {
             StandardExpressionParser expressionParser=new StandardExpressionParser();
             String fieldExpression="";
             if(attributeValue.startsWith("${") && attributeValue.endsWith("}")){
+
                 fieldExpression=attributeValue.substring(2,attributeValue.length()-1);
                 int lastDotIndex=fieldExpression.lastIndexOf('.');
+
                 if(lastDotIndex!=-1){
                     String field=fieldExpression.substring(lastDotIndex+1);
-                    String[] classNames=fieldExpression.substring(0,lastDotIndex).split(Pattern.quote("."));
+
+                    String[] classNames=fieldExpression.substring(0,lastDotIndex)
+                            .split(Pattern.quote("."));
                     Class<?> cls=context.getVariable(classNames[0]).getClass();
                     for(int i=1;i< classNames.length;i++){
                         cls=cls.getDeclaredField(classNames[i]).getType();
                     }
+
                     String displayName=getDisplayName(cls,field);
                     String text=tag.getAttributeValue("th","text");
                     if(text!=null && text.length()>0){
@@ -61,7 +66,6 @@ public class DisplayNameTagProcessor extends AbstractAttributeTagProcessor {
             structureHandler.setBody("",false);
         }
     }
-
     String getDisplayName(Class<?> cls,String fieldName){
         try{
             Field field=cls.getDeclaredField(fieldName);

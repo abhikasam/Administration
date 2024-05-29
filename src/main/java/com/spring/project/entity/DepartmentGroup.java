@@ -2,7 +2,9 @@ package com.spring.project.entity;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "departmentgroup")
 public class DepartmentGroup {

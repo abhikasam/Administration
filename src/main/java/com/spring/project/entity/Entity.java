@@ -2,11 +2,14 @@ package com.spring.project.entity;
 
 import com.spring.project.annotations.DisplayName;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @jakarta.persistence.Entity
 @Table(name = "entity")
+@NoArgsConstructor
 public class Entity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
