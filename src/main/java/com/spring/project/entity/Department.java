@@ -31,7 +31,7 @@ public class Department {
 
     @ManyToOne
     @JoinColumn(name = "groupid")
-    private DepartmentGroup departmentGroup;
+    private DepartmentGroup departmentGroup=new DepartmentGroup();
 
     @Column(name = "isactive")
     @DisplayName("Active")
@@ -39,31 +39,5 @@ public class Department {
 
     @ManyToOne
     @JoinColumn(name = "entityid")
-    private com.spring.project.entity.Entity entity;
-
-    @Transient
-    @DisplayName("Entity")
-    private int entityId=0;
-
-    @Transient
-    @DisplayName("Department Group")
-    private int departmentGroupId=0;
-
-    public void setEntityId(int id){
-        this.entity=new com.spring.project.entity.Entity();
-        entity.setEntityId(id);
-        this.entityId=id;
-    }
-    public int getEntityId(){
-        return this.entityId;
-    }
-    public void setDepartmentGroupId(int id){
-        this.departmentGroup=new DepartmentGroup();
-        departmentGroup.setGroupId(id);
-        this.departmentGroupId=id;
-    }
-
-    public int getDepartmentGroupId(){
-        return this.departmentGroupId;
-    }
+    private com.spring.project.entity.Entity entity=new com.spring.project.entity.Entity();
 }

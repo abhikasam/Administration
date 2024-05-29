@@ -23,6 +23,7 @@
                       th:text="${error.defaultMessage}"></span>
       </div>
       <form th:action="@{/department/edit}" method="post" th:object="${department}">
+          <input type="hidden" name="isNew" th:value="${isNew}" >
           <div class="row mt-2">
               <div class="col-2">
                   <label display:field="${department.departmentCode}"></label> :
@@ -57,41 +58,46 @@
           </div>
           <div class="row mt-2">
               <div class="col-2">
-                  <label display:field="${department.entityId}"></label> :
+                  <label display:field="${department.entity.entityId}"></label> :
               </div>
               <div class="col-4">
-                  <select name="entityId"
-                          th:class="'form-control'+(${#fields.hasErrors('entityId')}?' error':'')"
-                          th:value="*{entityId}"
+                  <select name="entity.entityId"
+                          th:class="'form-control'+(${#fields.hasErrors('entity.entityId')}?' error':'')"
+                          th:value="${department.entity.entityId}"
                   >
                       <option th:text="-Select-" th:value="0"></option>
                       <option th:each="item : ${entitySelectList}"
                               th:value="${item.value}"
                               th:text="${item.text}"
+                              th:selected="${item.selected}"
                       ></option>
                   </select>
-                  <div th:if="${#fields.hasErrors('entityId')}"
-                       th:errors="*{entityId}"
+                  <div th:if="${#fields.hasErrors('entity.entityId')}"
+                       th:errors="*{entity.entityId}"
                        th:errorClass="text-danger"
                   ></div>
               </div>
           </div>
           <div class="row mt-2">
               <div class="col-2">
-                  <label display:field="${department.departmentGroupId}"></label> :
+                  <label display:field="${department.departmentGroup.groupId}"></label> :
               </div>
               <div class="col-4">
-                  <select name="departmentGroupId"
-                          th:class="'form-control'+(${#fields.hasErrors('departmentGroupId')}?' error':'')"
-                          th:value="*{departmentGroupId}"
+                  <select name="departmentGroup.groupId"
+                          th:class="'form-control'+(${#fields.hasErrors('departmentGroup.groupId')}?' error':'')"
+                          th:value="${department.departmentGroup.groupId}"
                   >
                       <option th:text="-Select-"
                               th:value="0"
                       ></option>
-                      <option th:each="item : ${departmentGroupSelectList}" th:value="${item.value}" th:text="${item.text}"></option>
+                      <option th:each="item : ${departmentGroupSelectList}"
+                              th:value="${item.value}"
+                              th:text="${item.text}"
+                              th:selected="${item.selected}"
+                      ></option>
                   </select>
-                  <div th:if="${#fields.hasErrors('departmentGroupId')}"
-                       th:errors="*{departmentGroupId}"
+                  <div th:if="${#fields.hasErrors('departmentGroup.groupId')}"
+                       th:errors="*{departmentGroup.groupId}"
                        th:errorClass="text-danger"
                   ></div>
               </div>

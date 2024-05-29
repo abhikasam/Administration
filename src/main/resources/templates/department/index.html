@@ -36,6 +36,8 @@
             <th>
                 <label display:field="${department.entity.entityName}" />
             </th>
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -43,6 +45,19 @@
                 <td th:text="${department.departmentCode}"></td>
                 <td th:text="${department.departmentName}"></td>
                 <td th:text="${department.entity.entityName}"></td>
+                <td>
+                    <a class="btn btn-primary"
+                       th:href="@{/department/edit(id=${department.departmentCode})}">
+                        Edit
+                    </a>
+                </td>
+                <td>
+                    <a class="btn btn-secondary"
+                       th:href="@{/department/delete(id=${department.departmentCode})}"
+                    >
+                        Delete
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>
