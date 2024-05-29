@@ -32,6 +32,11 @@ public class DepartmentController {
     @Autowired
     private Validator validator;
     private Department department=new Department();
+    @ModelAttribute("department")
+    public void setDepartment(Department department){
+        this.department=department;
+    }
+
     private List<SelectListItem> entitySelectList=new ArrayList<>();
     private List<SelectListItem> departmentGroupSelectList=new ArrayList<>();
 
@@ -70,6 +75,7 @@ public class DepartmentController {
     }
 
     public void populateSelectList(Model model){
+        entitySelectList.clear();
         for(var entity : entityService.entites()){
             entitySelectList.add(new SelectListItem(
                     entity.getEntityName(),
@@ -78,6 +84,7 @@ public class DepartmentController {
             ));
         }
         model.addAttribute("entitySelectList",entitySelectList);
+        departmentGroupSelectList.clear();
         for(var group : departmentGroupService.departmentGroups()){
             departmentGroupSelectList.add(new SelectListItem(
                     group.getName(),

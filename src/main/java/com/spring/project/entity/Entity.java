@@ -14,6 +14,7 @@ public class Entity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @DisplayName("Entity")
     private int entityId;
     @Column(name = "name",nullable = false,length = 200)
     @DisplayName("Entity")

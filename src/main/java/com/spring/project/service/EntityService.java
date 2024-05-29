@@ -15,5 +15,4 @@ public class EntityService {
     public List<Entity> entites(){
         return entityRepository.findAll();
     }
-
 }

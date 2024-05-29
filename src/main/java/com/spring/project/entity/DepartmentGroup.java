@@ -1,5 +1,6 @@
 package com.spring.project.entity;
 
+import com.spring.project.annotations.DisplayName;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import lombok.Data;
@@ -11,6 +12,7 @@ public class DepartmentGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "groupid")
+    @DisplayName("Department Group")
     private int groupId;
     @Column(name = "name")
     private String name;
