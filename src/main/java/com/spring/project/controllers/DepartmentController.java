@@ -5,8 +5,11 @@ import com.spring.project.entity.Entity;
 import com.spring.project.service.DepartmentGroupService;
 import com.spring.project.service.DepartmentService;
 import com.spring.project.service.EntityService;
+import com.spring.project.shared.Pagination;
 import com.spring.project.shared.PersistanceValidationGroup;
 import com.spring.project.shared.SelectListItem;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
@@ -37,12 +40,24 @@ public class DepartmentController {
         this.department=department;
     }
 
+    private Pagination pagination=new Pagination();
+    @ModelAttribute("pagination")
+    public void setPagination(Pagination pagination){
+        this.pagination=pagination;
+    }
     private List<SelectListItem> entitySelectList=new ArrayList<>();
     private List<SelectListItem> departmentGroupSelectList=new ArrayList<>();
 
     @GetMapping(value = {"","/","/index"})
-    public String index(Model model){
-        model.addAttribute("departments",departmentService.departments());
+    public String index(Model model,
+                        @Nullable @RequestParam Integer pageNumber,
+                        @Nullable @RequestParam Integer pageSize,
+                        HttpServletRequest request){
+        pagination=new Pagination(pageNumber,pageSize);
+        model.addAttribute("url",request.getRequestURI());
+        model.addAttribute("departments",
+                departmentService.departments(pagination));
+        model.addAttribute("pagination",pagination);
         return "department/index";
     }
 

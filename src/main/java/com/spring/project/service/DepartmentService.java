@@ -2,6 +2,7 @@ package com.spring.project.service;
 
 import com.spring.project.entity.Department;
 import com.spring.project.repository.IDepartmentRepository;
+import com.spring.project.shared.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,18 @@ public class DepartmentService {
 
     public List<Department> departments(){
         return departmentRepository.findAll();
+    }
+
+    public List<Department> departments(Pagination pagination){
+        var departments=departmentRepository.findAll();
+        var totalRecords = departments.size();
+
+        Pagination.updatePagination(totalRecords,pagination);
+
+        var skip = (pagination.getPageNumber() - 1) * pagination.getPageSize();
+        var take = pagination.getPageSize();
+
+        return departments.stream().skip(skip).limit(take).toList();
     }
 
     public Department getDepartment(Integer id){
