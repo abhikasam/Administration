@@ -54,7 +54,6 @@ public class DepartmentController {
                         @Nullable @RequestParam Integer pageSize,
                         HttpServletRequest request){
         pagination=new Pagination(pageNumber,pageSize);
-        model.addAttribute("url",request.getRequestURI());
         model.addAttribute("departments",
                 departmentService.departments(pagination));
         model.addAttribute("pagination",pagination);
