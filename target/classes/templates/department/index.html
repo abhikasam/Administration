@@ -24,17 +24,21 @@
             </div>
         </div>
     </div>
+    <div th:replace="shared/pagination :: paginationFragment(${pagination},${url})"></div>
     <table class="table">
         <thead class="thead-light">
         <tr>
-            <th>
+            <th class="text-center">
                 <label display:field="${department.departmentCode}" />
             </th>
-            <th>
+            <th class="text-center">
                 <label display:field="${department.departmentName}" />
             </th>
-            <th>
+            <th class="text-center">
                 <label display:field="${department.entity.entityName}" />
+            </th>
+            <th class="text-center">
+                <label display:field="${department.departmentGroup.groupName}"></label>
             </th>
             <th></th>
             <th></th>
@@ -45,6 +49,7 @@
                 <td th:text="${department.departmentCode}"></td>
                 <td th:text="${department.departmentName}"></td>
                 <td th:text="${department.entity.entityName}"></td>
+                <td th:text="${department.departmentGroup.groupName}"></td>
                 <td>
                     <a class="btn btn-primary"
                        th:href="@{/department/edit(id=${department.departmentCode})}">

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Pagination</title>
+    <link href="/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
+    <link href="/assets/css/bootstrap/site.css" rel="stylesheet" />
+    <script src="/assets/js/bootstrap/bootstrap.js"></script>
+    <script src="/assets/js/jquery/jquery.js"></script>
+    <script src="/assets/js/jquery/popper.js"></script>
+    <script src="/static/assets/js/shared/department.js" type=""></script>
+</head>
+<body>
+<!-- shared/pagination.html -->
+<div th:fragment="paginationFragment(pagination, requestUri)">
+  <div class="col text-end">
+    <div class="d-inline-block">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-end">
+          <li class="page-item" th:classappend="${pagination.pageNumber == 1} ? 'disabled'">
+            <a class="page-link" th:data-page="${pagination.pageNumber - 1}" tabindex="-1">Previous</a>
+          </li>
+
+          <th:block th:if="${pagination.totalPages < 8}">
+            <li th:each="num : ${#numbers.sequence(1, pagination.totalPages)}" class="page-item" th:classappend="${pagination.pageNumber == num} ? 'active'">
+              <a class="page-link" th:data-page="${num}" th:text="${num}"></a>
+            </li>
+          </th:block>
+
+          <th:block th:if="${pagination.totalPages >= 8}">
+            <th:block th:if="${pagination.pageNumber >= 5 && pagination.pageNumber < pagination.totalPages - 3}">
+              <li class="page-item">
+                <a class="page-link" th:data-page="1">1</a>
+              </li>
+              <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+              <li th:each="num : ${#numbers.sequence(pagination.pageNumber - 1, pagination.pageNumber + 1)}" class="page-item" th:classappend="${pagination.pageNumber == num} ? 'active'">
+                <a class="page-link" th:data-page="${num}" th:text="${num}"></a>
+              </li>
+              <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+              <li class="page-item">
+                <a class="page-link" th:data-page="${pagination.totalPages}" th:text="${pagination.totalPages}"></a>
+              </li>
+            </th:block>
+
+            <th:block th:if="${pagination.pageNumber < 5}">
+              <li th:each="num : ${#numbers.sequence(1, 5)}" class="page-item" th:classappend="${pagination.pageNumber == num} ? 'active'">
+                <a class="page-link" th:data-page="${num}" th:text="${num}"></a>
+              </li>
+              <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+              <li class="page-item">
+                <a class="page-link" th:data-page="${pagination.totalPages}" th:text="${pagination.totalPages}"></a>
+              </li>
+            </th:block>
+
+            <th:block th:if="${pagination.pageNumber > pagination.totalPages - 4}">
+              <li class="page-item">
+                <a class="page-link" th:data-page="1">1</a>
+              </li>
+              <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+              <li th:each="num : ${#numbers.sequence(pagination.totalPages - 4, pagination.totalPages)}" class="page-item" th:classappend="${pagination.pageNumber == num} ? 'active'">
+                <a class="page-link" th:data-page="${num}" th:text="${num}"></a>
+              </li>
+            </th:block>
+          </th:block>
+
+          <li class="page-item" th:classappend="${pagination.pageNumber == pagination.totalPages} ? 'disabled'">
+            <a class="page-link" th:data-page="${pagination.pageNumber + 1}" tabindex="-1">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+</body>
+</html>
