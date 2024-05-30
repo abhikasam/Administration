@@ -57,7 +57,6 @@ public class DepartmentController {
 
     @PostMapping("/edit")
     public String edit(Model model,
-                       @ModelAttribute("department") Department department,
                        @ModelAttribute("isNew") boolean isNew,
                        BindingResult bindingResult) {
         populateSelectList(model);
@@ -69,9 +68,30 @@ public class DepartmentController {
             model.addAttribute("errors",bindingResult.getAllErrors());
             return "/department/edit";
         }
-        departmentService.save(department);
+        if(!departmentService.save(department)){
+            model.addAttribute("errorsaving","Unable to save department");
+            return "/department/edit";
+        }
         model.addAttribute("isNew",false);
-        return "redirect:edit?id="+department.getDepartmentCode()+"&success";
+        return "redirect:edit?id="+department.getDepartmentCode()+"&saveSuccess";
+    }
+
+    @GetMapping("/delete")
+    public String delete(Model model,
+                             @Nullable @RequestParam("id") Integer id){
+        department=departmentService.getDepartment(id);
+        if(department.getDepartmentCode()==0)
+            return "redirect:edit?notfound";
+        model.addAttribute("department",department);
+        return "/department/delete";
+    }
+    @PostMapping("/delete")
+    public String delete(Model model){
+        if(!departmentService.delete(department)){
+            model.addAttribute("errordeleting","Unable to delete department");
+            return "/department/delete";
+        }
+        return "redirect:edit?delSuccess";
     }
 
     public void populateSelectList(Model model){
@@ -87,7 +107,7 @@ public class DepartmentController {
         departmentGroupSelectList.clear();
         for(var group : departmentGroupService.departmentGroups()){
             departmentGroupSelectList.add(new SelectListItem(
-                    group.getName(),
+                    group.getGroupName(),
                     String.valueOf(group.getGroupId()),
                     group.getGroupId()==department.getDepartmentGroup().getGroupId()
             ));

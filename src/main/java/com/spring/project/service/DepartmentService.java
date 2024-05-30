@@ -62,4 +62,14 @@ public class DepartmentService {
         return true;
     }
 
+    public boolean delete(Department department){
+        try{
+            departmentRepository.delete(department);
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

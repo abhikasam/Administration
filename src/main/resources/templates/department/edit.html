@@ -15,8 +15,16 @@
 <body>
   Department Edit.
   <div class="container">
-      <div th:if="${param.success}" class="text text-success">
+      <div th:if="${param.saveSuccess}" class="text text-success">
           Department saved successfully.
+      </div>
+      <div th:if="${param.delSuccess}" class="text text-success">
+          Department deleted successfully.
+      </div>
+      <div th:if="${param.notfound}" class="text text-danger">
+          Department not found.
+      </div>
+      <div th:if="${errorsaving}" class="text text-danger" th:text="${errorsaving}">
       </div>
       <div class="alert alert-danger" th:each="error : ${errors}">
               <span

@@ -15,7 +15,8 @@ public class DepartmentGroup {
     @DisplayName("Department Group")
     private int groupId;
     @Column(name = "name")
-    private String name;
+    @DisplayName("Group")
+    private String groupName;
     @Column(name = "isactive")
     private boolean isActive;
     @Column(name = "grouptype")
