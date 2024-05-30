@@ -8,8 +8,10 @@
     <title>Administration - Departments</title>
     <link href="/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
     <script src="/assets/js/bootstrap/bootstrap.js"></script>
+    <link href="/assets/css/shared/site.css" rel="stylesheet" />
     <script src="/assets/js/jquery/jquery.js"></script>
     <script src="/assets/js/jquery/popper.js"></script>
+    <script src="/assets/js/shared/department.js" type=""></script>
 </head>
 <body>
     <div class="container">
@@ -24,27 +26,28 @@
             </div>
         </div>
     </div>
-    <div th:replace="shared/pagination :: paginationFragment(${pagination},${url})"></div>
-    <table class="table">
-        <thead class="thead-light">
-        <tr>
-            <th class="text-center">
-                <label display:field="${department.departmentCode}" />
-            </th>
-            <th class="text-center">
-                <label display:field="${department.departmentName}" />
-            </th>
-            <th class="text-center">
-                <label display:field="${department.entity.entityName}" />
-            </th>
-            <th class="text-center">
-                <label display:field="${department.departmentGroup.groupName}"></label>
-            </th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
+    <form th:action="@{/department}" method="get">
+        <div th:replace="shared/pagination :: paginationFragment(${pagination})"></div>
+        <table class="table">
+            <thead class="thead-light">
+            <tr>
+                <th class="text-center">
+                    <label display:field="${department.departmentCode}" />
+                </th>
+                <th class="text-center">
+                    <label display:field="${department.departmentName}" />
+                </th>
+                <th class="text-center">
+                    <label display:field="${department.entity.entityName}" />
+                </th>
+                <th class="text-center">
+                    <label display:field="${department.departmentGroup.groupName}"></label>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
             <tr th:each="department : ${departments}">
                 <td th:text="${department.departmentCode}"></td>
                 <td th:text="${department.departmentName}"></td>
@@ -64,7 +67,8 @@
                     </a>
                 </td>
             </tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </form>
 </body>
 </html>
