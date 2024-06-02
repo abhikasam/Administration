@@ -31,7 +31,7 @@
             <div class="col-2">
                 <div class="mt-3 d-inline-block">
                     <button class="updateDepartmentFilters btn btn-primary" th:text="Update"></button>
-                    <button class="clearDepartmentFilters btn btn-secondary" th:text="Clear"></button>
+                    <a th:href="@{/department}" class="btn btn-secondary" th:text="Clear"></a>
                 </div>
                 <div class="mt-2"></div>
                 <label display:field="${departmentFilter.departmentName}"></label> :

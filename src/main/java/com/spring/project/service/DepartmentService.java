@@ -34,33 +34,15 @@ public class DepartmentService {
         return departmentRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
     public List<Department> departments(Pagination pagination, DepartmentFilter departmentFilter) {
-        var builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Department> query = builder.createQuery(Department.class);
-        Root<Department> root = query.from(Department.class);
-        Predicate[] predicates=new Predicate[0];
-        predicates=getPredicates(builder,root,departmentFilter);
-
-        query.where(predicates);
-        query.select(root);
-
-        CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
-        Root<Department> countRoot=countQuery.from(Department.class);
-        predicates=getPredicates(builder,countRoot,departmentFilter);
-
-        countQuery.where(predicates);
-        countQuery.select(builder.count(countRoot));
-
-        var createdCountQuery=entityManager.createQuery(countQuery);
-
-        var totalRecords = (Long) createdCountQuery.getSingleResult();
-        Pagination.updatePagination(totalRecords,pagination);
+        var totalRecords= totalRecords(departmentFilter);
+        var totalRecordCount = totalRecordCount(departmentFilter);
+        Pagination.updatePagination(totalRecordCount,pagination);
 
         var skip = (pagination.getPageNumber() - 1) * pagination.getPageSize();
         var take = pagination.getPageSize();
 
-        return entityManager.createQuery(query)
+        return totalRecords
                 .setFirstResult(skip).setMaxResults(take).getResultList();
     }
 
@@ -68,6 +50,7 @@ public class DepartmentService {
         List<Predicate> predicates=new ArrayList<>();
         if(departmentFilter!=null){
             root.join("entity");
+            root.join("departmentGroup");
             if (departmentFilter.getDepartmentName() != null && !departmentFilter.getDepartmentName().isEmpty()) {
                 predicates.add(
                         (Predicate) builder.and(
@@ -87,35 +70,36 @@ public class DepartmentService {
                         )
                 );
             }
+            if(departmentFilter.getGroupId()!=0){
+                predicates.add((Predicate)
+                        builder.equal(
+                                root.get("departmentGroup").get("groupId"),
+                                departmentFilter.getGroupId()
+                        )
+                );
+            }
         }
         return predicates.toArray(new Predicate[0]);
     }
-    public List<Department> applyPagination(CriteriaBuilder criteriaBuilder,TypedQuery<Department> query, Pagination pagination){
 
-        CriteriaQuery<Long> countQuery=criteriaBuilder.createQuery(Long.class);
-        Root<Department> countRoot=countQuery.from(Department.class);
-        countQuery.select(criteriaBuilder.count(countRoot));
+    private TypedQuery<Department> totalRecords(DepartmentFilter departmentFilter){
+        var builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Department> query = builder.createQuery(Department.class);
+        Root<Department> root = query.from(Department.class);
+        Predicate[] predicates=getPredicates(builder,root,departmentFilter);
 
-        var totalRecords =  entityManager.createQuery(countQuery).getFirstResult();
-
-        Pagination.updatePagination(totalRecords,pagination);
-
-        var skip = (pagination.getPageNumber() - 1) * pagination.getPageSize();
-        var take = pagination.getPageSize();
-
-        return query.setFirstResult(skip).setMaxResults(take).getResultList();
+        query.where(predicates);
+        query.select(root);
+        return entityManager.createQuery(query);
     }
-
-    public List<Department> departments(Pagination pagination){
-        var departments=departmentRepository.findAll();
-        var totalRecords = departments.size();
-
-        Pagination.updatePagination(totalRecords,pagination);
-
-        var skip = (pagination.getPageNumber() - 1) * pagination.getPageSize();
-        var take = pagination.getPageSize();
-
-        return departments.stream().skip(skip).limit(take).toList();
+    private Long totalRecordCount(DepartmentFilter departmentFilter){
+        CriteriaBuilder builder=entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
+        Root<Department> countRoot=countQuery.from(Department.class);
+        Predicate[] predicates=getPredicates(builder,countRoot,departmentFilter);
+        countQuery.where(predicates);
+        countQuery.select(builder.count(countRoot));
+        return entityManager.createQuery(countQuery).getSingleResult();
     }
 
     public Department getDepartment(Integer id){
