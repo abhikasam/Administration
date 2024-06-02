@@ -153,7 +153,7 @@ public class DepartmentService {
         return entityManager.createQuery(countQuery).getSingleResult();
     }
 
-    public List<String[]> getTotalRecordsForExcel(DepartmentFilter departmentFilter, Sorter sorter, Pagination pagination){
+    public List<String[]> getTotalRecordsForExport(DepartmentFilter departmentFilter, Sorter sorter, Pagination pagination){
         List<String[]> data = new ArrayList<>();
         var headers= new String[]{"Department Code", "Department Name", "Entity Name","Group Name"};
 

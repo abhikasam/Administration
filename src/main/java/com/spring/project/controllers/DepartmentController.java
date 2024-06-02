@@ -4,10 +4,7 @@ import com.spring.project.entity.Department;
 import com.spring.project.entity.Entity;
 import com.spring.project.enums.SortingType;
 import com.spring.project.filter.DepartmentFilter;
-import com.spring.project.service.DepartmentGroupService;
-import com.spring.project.service.DepartmentService;
-import com.spring.project.service.EntityService;
-import com.spring.project.service.ExcelService;
+import com.spring.project.service.*;
 import com.spring.project.shared.Pagination;
 import com.spring.project.shared.PersistanceValidationGroup;
 import com.spring.project.shared.SelectListItem;
@@ -43,6 +40,8 @@ public class DepartmentController {
     private DepartmentGroupService departmentGroupService;
     @Autowired
     private ExcelService excelService;
+    @Autowired
+    private PdfService pdfService;
     @Autowired
     private Validator validator;
     private Department department=new Department();
@@ -131,14 +130,27 @@ public class DepartmentController {
 
     @GetMapping("/export/excel")
     public ResponseEntity<byte[]> downloadExcel() throws IOException {
-
-        var data=departmentService.getTotalRecordsForExcel(departmentFilter,sorter,pagination);
+        var data=departmentService.getTotalRecordsForExport(departmentFilter,sorter,pagination);
         byte[] excelData = excelService.generateExcel(data,"Department");
 
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Department.xlsx")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Departments.xlsx")
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(excelData);
+    }
+
+    @GetMapping("/export/pdf")
+    public ResponseEntity<byte[]> downloadPdf() throws IOException{
+        var data=departmentService.getTotalRecordsForExport(departmentFilter,sorter,pagination);
+        byte[] pdfData= pdfService.generatePdf(data);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDispositionFormData("attachment", "Departments.pdf");
+        headers.setContentType(MediaType.APPLICATION_PDF);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfData);
     }
     public void populateSelectList(Model model){
         entitySelectList.clear();
