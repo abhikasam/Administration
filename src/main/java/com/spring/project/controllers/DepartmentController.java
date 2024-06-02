@@ -65,6 +65,9 @@ public class DepartmentController {
                         HttpServletRequest request){
         populateSelectList(model);
         pagination=new Pagination(pageNumber,pageSize);
+        if(sorter.getSortBy()==null && sorter.getOrderBy()==null){
+            sorter=new Sorter("departmentCode",SortingType.ASCENDING);
+        }
         var departments=departmentService.departments(departmentFilter,sorter,pagination);
         model.addAttribute("departments",departments);
         model.addAttribute("departmentFilter",departmentFilter);

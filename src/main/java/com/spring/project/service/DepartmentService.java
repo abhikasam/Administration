@@ -106,34 +106,44 @@ public class DepartmentService {
         var builder=entityManager.getCriteriaBuilder();
         Order order;
         if(sorter.getOrderBy()== SortingType.DESCENDING){
+            sorter.setOrderBy(SortingType.DESCENDING);
             switch (sorter.getSortBy()){
                 case "departmentName":
                     order=builder.desc(root.get("departmentName"));
+                    sorter.setSortBy("departmentName");
                     break;
                 case "entityName":
                     order=builder.desc(root.get("entity").get("entityName"));
+                    sorter.setSortBy("entityName");
                     break;
                 case "groupName":
                     order=builder.desc(root.get("departmentGroup").get("groupName"));
+                    sorter.setSortBy("groupName");
                     break;
                 default:
                     order=builder.desc(root.get("departmentCode"));
+                    sorter.setSortBy("departmentCode");
                     break;
             }
         }
         else{
+            sorter.setOrderBy(SortingType.ASCENDING);
             switch (sorter.getSortBy()){
                 case "departmentName":
                     order=builder.asc(root.get("departmentName"));
+                    sorter.setSortBy("departmentName");
                     break;
                 case "entityName":
                     order=builder.asc(root.get("entity").get("entityName"));
+                    sorter.setSortBy("entityName");
                     break;
                 case "groupName":
                     order=builder.asc(root.get("departmentGroup").get("groupName"));
+                    sorter.setSortBy("groupName");
                     break;
                 default:
                     order=builder.asc(root.get("departmentCode"));
+                    sorter.setSortBy("departmentCode");
                     break;
             }
         }
