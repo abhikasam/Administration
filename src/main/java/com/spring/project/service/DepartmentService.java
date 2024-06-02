@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -105,45 +106,38 @@ public class DepartmentService {
     private Order getOrder(Root<Department> root,Sorter sorter){
         var builder=entityManager.getCriteriaBuilder();
         Order order;
+        if(sorter.getSortBy()==null || sorter.getSortBy().isEmpty()){
+            sorter.setSortBy("departmentCode");
+        }
         if(sorter.getOrderBy()== SortingType.DESCENDING){
-            sorter.setOrderBy(SortingType.DESCENDING);
             switch (sorter.getSortBy()){
                 case "departmentName":
                     order=builder.desc(root.get("departmentName"));
-                    sorter.setSortBy("departmentName");
                     break;
                 case "entityName":
                     order=builder.desc(root.get("entity").get("entityName"));
-                    sorter.setSortBy("entityName");
                     break;
                 case "groupName":
                     order=builder.desc(root.get("departmentGroup").get("groupName"));
-                    sorter.setSortBy("groupName");
                     break;
                 default:
                     order=builder.desc(root.get("departmentCode"));
-                    sorter.setSortBy("departmentCode");
                     break;
             }
         }
         else{
-            sorter.setOrderBy(SortingType.ASCENDING);
             switch (sorter.getSortBy()){
                 case "departmentName":
                     order=builder.asc(root.get("departmentName"));
-                    sorter.setSortBy("departmentName");
                     break;
                 case "entityName":
                     order=builder.asc(root.get("entity").get("entityName"));
-                    sorter.setSortBy("entityName");
                     break;
                 case "groupName":
                     order=builder.asc(root.get("departmentGroup").get("groupName"));
-                    sorter.setSortBy("groupName");
                     break;
                 default:
                     order=builder.asc(root.get("departmentCode"));
-                    sorter.setSortBy("departmentCode");
                     break;
             }
         }
@@ -157,6 +151,25 @@ public class DepartmentService {
         countQuery.where(predicates);
         countQuery.select(builder.count(countRoot));
         return entityManager.createQuery(countQuery).getSingleResult();
+    }
+
+    public List<String[]> getTotalRecordsForExcel(DepartmentFilter departmentFilter, Sorter sorter, Pagination pagination){
+        List<String[]> data = new ArrayList<>();
+        var headers= new String[]{"Department Code", "Department Name", "Entity Name","Group Name"};
+
+        data.add(headers);
+        var departments=departments(departmentFilter,sorter,pagination);
+        for(var department : departments){
+            data.add(
+                    new String[]{
+                            String.valueOf(department.getDepartmentCode()),
+                            department.getDepartmentName(),
+                            department.getEntity().getEntityName(),
+                            department.getDepartmentGroup().getGroupName()
+                    }
+            );
+        }
+        return data;
     }
 
     public Department getDepartment(Integer id){

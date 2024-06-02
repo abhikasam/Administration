@@ -7,6 +7,7 @@ import com.spring.project.filter.DepartmentFilter;
 import com.spring.project.service.DepartmentGroupService;
 import com.spring.project.service.DepartmentService;
 import com.spring.project.service.EntityService;
+import com.spring.project.service.ExcelService;
 import com.spring.project.shared.Pagination;
 import com.spring.project.shared.PersistanceValidationGroup;
 import com.spring.project.shared.SelectListItem;
@@ -14,6 +15,9 @@ import com.spring.project.shared.Sorter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +27,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -35,6 +41,8 @@ public class DepartmentController {
     private EntityService entityService;
     @Autowired
     private DepartmentGroupService departmentGroupService;
+    @Autowired
+    private ExcelService excelService;
     @Autowired
     private Validator validator;
     private Department department=new Department();
@@ -60,11 +68,8 @@ public class DepartmentController {
 
     @GetMapping(value = {"","/","/index"})
     public String index(Model model,
-                        @Nullable @RequestParam Integer pageNumber,
-                        @Nullable @RequestParam Integer pageSize,
                         HttpServletRequest request){
         populateSelectList(model);
-        pagination=new Pagination(pageNumber,pageSize);
         if(sorter.getSortBy()==null && sorter.getOrderBy()==null){
             sorter=new Sorter("departmentCode",SortingType.ASCENDING);
         }
@@ -124,6 +129,17 @@ public class DepartmentController {
         return "redirect:edit?delSuccess";
     }
 
+    @GetMapping("/export/excel")
+    public ResponseEntity<byte[]> downloadExcel() throws IOException {
+
+        var data=departmentService.getTotalRecordsForExcel(departmentFilter,sorter,pagination);
+        byte[] excelData = excelService.generateExcel(data,"Department");
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Department.xlsx")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(excelData);
+    }
     public void populateSelectList(Model model){
         entitySelectList.clear();
         for(var entity : entityService.entites()){
@@ -144,5 +160,4 @@ public class DepartmentController {
         }
         model.addAttribute("departmentGroupSelectList",departmentGroupSelectList);
     }
-
 }

@@ -15,16 +15,15 @@
     <script src="https://kit.fontawesome.com/87f7bd0a03.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="row mt-2">
-            <div class="col-8">
-                <div class="fw-bold">
-                    Departments
-                </div>
+    <div class="row mt-2 mb-2">
+        <div class="col-8">
+            <div class="fw-bold">
+                Departments
             </div>
-            <div class="col-4">
-                <a class="btn btn-primary" th:href="@{/department/edit}">Add Department</a>
-            </div>
+        </div>
+        <div class="col-4 text-end">
+            <a class="btn btn-primary" th:href="@{/department/export/excel}">Export</a>
+            <a class="btn btn-primary" th:href="@{/department/edit}">Add Department</a>
         </div>
     </div>
     <form th:action="@{/department}" method="get">

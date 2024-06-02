@@ -13,6 +13,6 @@ public class Sorter {
     @Autowired
     private String sortBy;
     @Autowired
-    private SortingType orderBy;
+    private SortingType orderBy=SortingType.ASCENDING;
 }
 
