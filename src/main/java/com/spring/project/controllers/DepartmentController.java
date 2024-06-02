@@ -2,6 +2,7 @@ package com.spring.project.controllers;
 
 import com.spring.project.entity.Department;
 import com.spring.project.entity.Entity;
+import com.spring.project.enums.SortingType;
 import com.spring.project.filter.DepartmentFilter;
 import com.spring.project.service.DepartmentGroupService;
 import com.spring.project.service.DepartmentService;
@@ -9,6 +10,7 @@ import com.spring.project.service.EntityService;
 import com.spring.project.shared.Pagination;
 import com.spring.project.shared.PersistanceValidationGroup;
 import com.spring.project.shared.SelectListItem;
+import com.spring.project.shared.Sorter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,9 @@ public class DepartmentController {
     public void setPagination(Pagination pagination){
         this.pagination=pagination;
     }
+    private Sorter sorter;
+    @ModelAttribute("sorter")
+    public void setSorter(Sorter sorter){this.sorter=sorter;}
     private List<SelectListItem> entitySelectList=new ArrayList<>();
     private List<SelectListItem> departmentGroupSelectList=new ArrayList<>();
 
@@ -60,10 +65,11 @@ public class DepartmentController {
                         HttpServletRequest request){
         populateSelectList(model);
         pagination=new Pagination(pageNumber,pageSize);
-        model.addAttribute("departments",
-                departmentService.departments(pagination,departmentFilter));
-        model.addAttribute("pagination",pagination);
+        var departments=departmentService.departments(departmentFilter,sorter,pagination);
+        model.addAttribute("departments",departments);
         model.addAttribute("departmentFilter",departmentFilter);
+        model.addAttribute("sorter",sorter);
+        model.addAttribute("pagination",pagination);
         return "department/index";
     }
 

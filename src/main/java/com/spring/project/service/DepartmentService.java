@@ -1,9 +1,11 @@
 package com.spring.project.service;
 
 import com.spring.project.entity.Department;
+import com.spring.project.enums.SortingType;
 import com.spring.project.filter.DepartmentFilter;
 import com.spring.project.repository.IDepartmentRepository;
 import com.spring.project.shared.Pagination;
+import com.spring.project.shared.Sorter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Tuple;
 import jakarta.persistence.TypedQuery;
@@ -14,6 +16,7 @@ import org.hibernate.query.sqm.tree.select.SqmQuerySpec;
 import org.hibernate.query.sqm.tree.select.SqmSelectStatement;
 import org.hibernate.query.sqm.tree.select.SqmSubQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -34,8 +37,10 @@ public class DepartmentService {
         return departmentRepository.findAll();
     }
 
-    public List<Department> departments(Pagination pagination, DepartmentFilter departmentFilter) {
-        var totalRecords= totalRecords(departmentFilter);
+    public List<Department> departments(DepartmentFilter departmentFilter
+                                ,Sorter sorter
+                                ,Pagination pagination) {
+        var totalRecords= totalRecords(departmentFilter,sorter);
         var totalRecordCount = totalRecordCount(departmentFilter);
         Pagination.updatePagination(totalRecordCount,pagination);
 
@@ -82,7 +87,7 @@ public class DepartmentService {
         return predicates.toArray(new Predicate[0]);
     }
 
-    private TypedQuery<Department> totalRecords(DepartmentFilter departmentFilter){
+    private TypedQuery<Department> totalRecords(DepartmentFilter departmentFilter,Sorter sorter){
         var builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Department> query = builder.createQuery(Department.class);
         Root<Department> root = query.from(Department.class);
@@ -90,7 +95,49 @@ public class DepartmentService {
 
         query.where(predicates);
         query.select(root);
+
+        Order order=getOrder(root,sorter);
+        query.orderBy(order);
+
         return entityManager.createQuery(query);
+    }
+
+    private Order getOrder(Root<Department> root,Sorter sorter){
+        var builder=entityManager.getCriteriaBuilder();
+        Order order;
+        if(sorter.getOrderBy()== SortingType.DESCENDING){
+            switch (sorter.getSortBy()){
+                case "departmentName":
+                    order=builder.desc(root.get("departmentName"));
+                    break;
+                case "entityName":
+                    order=builder.desc(root.get("entity").get("entityName"));
+                    break;
+                case "groupName":
+                    order=builder.desc(root.get("departmentGroup").get("groupName"));
+                    break;
+                default:
+                    order=builder.desc(root.get("departmentCode"));
+                    break;
+            }
+        }
+        else{
+            switch (sorter.getSortBy()){
+                case "departmentName":
+                    order=builder.asc(root.get("departmentName"));
+                    break;
+                case "entityName":
+                    order=builder.asc(root.get("entity").get("entityName"));
+                    break;
+                case "groupName":
+                    order=builder.asc(root.get("departmentGroup").get("groupName"));
+                    break;
+                default:
+                    order=builder.asc(root.get("departmentCode"));
+                    break;
+            }
+        }
+        return order;
     }
     private Long totalRecordCount(DepartmentFilter departmentFilter){
         CriteriaBuilder builder=entityManager.getCriteriaBuilder();

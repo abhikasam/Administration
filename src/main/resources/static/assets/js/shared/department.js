@@ -14,4 +14,17 @@ $(document).ready(function(){
         $('form').off('submit',null).submit()
     })
 
+    $('thead th label').off('click',null).on('click',function(){
+        var column=$(this).data('column')
+        $('#sortBy').val(column)
+        var direction=$(this).next('i').hasClass('fa-sort-down')
+        if(!direction){
+            $('#orderBy').val('ASCENDING')
+        }
+        else{
+            $('#orderBy').val('DESCENDING')
+        }
+        $('form').off('submit',null).submit()
+    })
+
 })
