@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class Pagination {
     private int pageNumber=1;
     private int pageSize=10;
-    private int totalPages=1;
+    private long totalPages=1;
 
     public Pagination(){}
     public Pagination(Integer pageNumber,Integer pageSize){
@@ -18,7 +18,7 @@ public class Pagination {
             this.pageSize=pageSize;
     }
 
-    public static void updatePagination(int totalRecords,Pagination pagination){
+    public static void updatePagination(long totalRecords,Pagination pagination){
         var totalPages = (totalRecords + pagination.pageSize) / pagination.pageSize;
 
         if (totalRecords % pagination.pageSize == 0)

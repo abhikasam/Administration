@@ -7,6 +7,11 @@ function changePageSize(event){
 $(document).ready(function(){
     $('.page-item .page-link').off('click',null).on('click',function(){
         $('#pageNumber').val($(this).data('page'))
-        $('form').submit()
+        $('form').off('submit',null).submit()
     })
+
+    $('#updateDepartmentFilters').off('click',null).on('click',function(){
+        $('form').off('submit',null).submit()
+    })
+
 })

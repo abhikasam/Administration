@@ -2,6 +2,7 @@ package com.spring.project.controllers;
 
 import com.spring.project.entity.Department;
 import com.spring.project.entity.Entity;
+import com.spring.project.filter.DepartmentFilter;
 import com.spring.project.service.DepartmentGroupService;
 import com.spring.project.service.DepartmentService;
 import com.spring.project.service.EntityService;
@@ -39,7 +40,11 @@ public class DepartmentController {
     public void setDepartment(Department department){
         this.department=department;
     }
-
+    private DepartmentFilter departmentFilter;
+    @ModelAttribute("departmentFilter")
+    public void setDepartmentFilter(DepartmentFilter departmentFilter){
+        this.departmentFilter=departmentFilter;
+    }
     private Pagination pagination=new Pagination();
     @ModelAttribute("pagination")
     public void setPagination(Pagination pagination){
@@ -53,10 +58,12 @@ public class DepartmentController {
                         @Nullable @RequestParam Integer pageNumber,
                         @Nullable @RequestParam Integer pageSize,
                         HttpServletRequest request){
+        populateSelectList(model);
         pagination=new Pagination(pageNumber,pageSize);
         model.addAttribute("departments",
-                departmentService.departments(pagination));
+                departmentService.departments(pagination,departmentFilter));
         model.addAttribute("pagination",pagination);
+        model.addAttribute("departmentFilter",departmentFilter);
         return "department/index";
     }
 
