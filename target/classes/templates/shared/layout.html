@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Application</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body th:fragment="layout(content)">
+<div th:replace="~{shared/header :: header}"></div>
+<div class="main-content">
+    <div th:replace="~{shared/sidebar :: sidebar}"></div>
+    <div th:replace="${content}"></div>
+</div>
+</body>
+</html>

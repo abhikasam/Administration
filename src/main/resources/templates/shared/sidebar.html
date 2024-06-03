@@ -1,0 +1,15 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<aside th:fragment="sidebar">
+    <ul>
+        <li><a th:href="@{/department}">Departments</a></li>
+        <li><a th:href="@{/settings}">Settings</a></li>
+        <li><a th:href="@{/logout}">Logout</a></li>
+    </ul>
+</aside>
+</body>
+</html>
